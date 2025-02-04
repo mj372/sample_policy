@@ -14,25 +14,21 @@
     "hosts": [
       {
         "name": "google_dns",
-        "type": "host",
         "ip-address": "8.8.8.8"
       },
       {
         "name": "domain_controller",
-        "type": "host",
         "ip-address": "172.24.1.1"
       }
     ],
     "networks": [
       {
         "name": "client_net",
-        "type": "network",
         "subnet": "192.168.101.0",
         "mask-length": 24
       },
       {
         "name": "myNetwork",
-        "type": "network",
         "subnet": "10.10.10.0",
         "mask-length": 24
       }
