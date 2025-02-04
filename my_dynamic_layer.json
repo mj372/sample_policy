@@ -8,12 +8,6 @@
     ],
     "services-icmp": [
       "echo-request"
-    ],
-    "services-tcp": [
-      "ldap"
-    ],
-    "networks": [
-      "myNetwork"
     ]
   },
   "objects": {
@@ -34,6 +28,12 @@
         "name": "client_net",
         "type": "network",
         "subnet": "192.168.101.0",
+        "mask-length": 24
+      },
+      {
+        "name": "myNetwork",
+        "type": "network",
+        "subnet": "10.10.10.0",
         "mask-length": 24
       }
     ]
@@ -61,41 +61,9 @@
         },
         {
           "name": "access_to_dc",
-          "action": "accept",
+          "action": "drop",
           "source": [
             "client_net"
-          ],
-          "destination": [
-            "domain_controller"
-          ],
-          "service": [
-            "ldap"
-          ],
-          "track": {
-            "type": "Log"
-          }
-        },
-        {
-          "name": "test",
-          "action": "accept",
-          "source": [
-            "mynetwork"
-          ],
-          "destination": [
-            "domain_controller"
-          ],
-          "service": [
-            "ldap"
-          ],
-          "track": {
-            "type": "Log"
-          }
-        },
-        {
-          "name": "ping_to_dc",
-          "action": "accept",
-          "source": [
-            "any"
           ],
           "destination": [
             "domain_controller"
@@ -108,17 +76,41 @@
           }
         },
         {
-          "name": "drop_all",
+          "name": "test",
           "action": "drop",
           "source": [
-            "any"
+            "mynetwork"
           ],
           "destination": [
-            "any"
+            "domain_controller"
           ],
           "service": [
-            "any"
+            "echo-request"
           ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "name": "ping_to_dc",
+          "action": "drop",
+          "source": "any",
+          "destination": [
+            "domain_controller"
+          ],
+          "service": [
+            "echo-request"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "name": "drop_all",
+          "action": "accept",
+          "source": "any",
+          "destination": "any",
+          "service": "any",
           "track": {
             "type": "None"
           }
