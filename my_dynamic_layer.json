@@ -28,7 +28,7 @@
         "mask-length": 24
       },
       {
-        "name": "myNetwork",
+        "name": "mynetwork",
         "subnet": "10.10.10.0",
         "mask-length": 24
       }
