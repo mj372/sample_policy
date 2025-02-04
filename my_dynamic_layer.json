@@ -1,0 +1,129 @@
+{
+  "comments": "Dynamic Layer Demo",
+  "tags": [],
+  "dry-run": false,
+  "referenced-objects": {
+    "access-layers": [
+      "my_dynamic_layer"
+    ],
+    "services-icmp": [
+      "echo-request"
+    ],
+    "services-tcp": [
+      "ldap"
+    ],
+    "networks": [
+      "myNetwork"
+    ]
+  },
+  "objects": {
+    "hosts": [
+      {
+        "name": "google_dns",
+        "type": "host",
+        "ip-address": "8.8.8.8"
+      },
+      {
+        "name": "domain_controller",
+        "type": "host",
+        "ip-address": "172.24.1.1"
+      }
+    ],
+    "networks": [
+      {
+        "name": "client_net",
+        "type": "network",
+        "subnet": "192.168.101.0",
+        "mask-length": 24
+      }
+    ]
+  },
+  "access-layers-content": [
+    {
+      "name": "my_dynamic_layer",
+      "operation": "replace",
+      "rulebase": [
+        {
+          "name": "client_to_google_dns",
+          "action": "accept",
+          "source": [
+            "client_net"
+          ],
+          "destination": [
+            "google_dns"
+          ],
+          "service": [
+            "echo-request"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "name": "access_to_dc",
+          "action": "accept",
+          "source": [
+            "client_net"
+          ],
+          "destination": [
+            "domain_controller"
+          ],
+          "service": [
+            "ldap"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "name": "test",
+          "action": "accept",
+          "source": [
+            "mynetwork"
+          ],
+          "destination": [
+            "domain_controller"
+          ],
+          "service": [
+            "ldap"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "name": "ping_to_dc",
+          "action": "accept",
+          "source": [
+            "any"
+          ],
+          "destination": [
+            "domain_controller"
+          ],
+          "service": [
+            "echo-request"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "name": "drop_all",
+          "action": "drop",
+          "source": [
+            "any"
+          ],
+          "destination": [
+            "any"
+          ],
+          "service": [
+            "any"
+          ],
+          "track": {
+            "type": "None"
+          }
+        }
+      ]
+    }
+  ]
+}
