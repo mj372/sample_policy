@@ -6,6 +6,12 @@
     "access-layers": [
       "my_dynamic_layer"
     ],
+    "services-tcp": [
+      "https",
+      "ssh",
+      "MySQL",
+      "Remote_Desktop_Protocol"
+    ],
     "services-icmp": [
       "echo-request"
     ]
@@ -19,6 +25,22 @@
       {
         "name": "domain_controller",
         "ip-address": "172.24.1.1"
+      },
+      {
+        "name": "Sales app",
+        "ip-address": "172.24.1.1"
+      },
+      {
+        "name": "Sales backend",
+        "ip-address": "172.24.1.2"
+      },
+      {
+        "name": "Sales SQL",
+        "ip-address": "172.24.1.3"
+      },
+      {
+        "name": "Jump Server",
+        "ip-address": "172.24.1.4"
       }
     ],
     "networks": [
@@ -28,7 +50,17 @@
         "mask-length": 24
       },
       {
-        "name": "mynetwork",
+        "name": "finance_net",
+        "subnet": "10.10.100.0",
+        "mask-length": 24
+      },
+      {
+        "name": "IT admins net",
+        "subnet": "192.168.60.0",
+        "mask-length": 28
+      },
+      {
+        "name": "myNetwork",
         "subnet": "10.10.10.0",
         "mask-length": 24
       }
@@ -40,6 +72,93 @@
       "operation": "replace",
       "rulebase": [
         {
+          "rule_number": 1,
+          "name": "finance_to_sales_app",
+          "action": "accept",
+          "source": [
+            "finance_net"
+          ],
+          "destination": [
+            "Sales app"
+          ],
+          "service": [
+            "https"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "rule_number": 2,
+          "name": "admin_to_sales",
+          "action": "accept",
+          "source": [
+            "IT admins net"
+          ],
+          "destination": [
+            "Sales app"
+          ],
+          "service": [
+            "https",
+            "ssh"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "rule_number": 3,
+          "name": "sales_to_backend_sql",
+          "action": "accept",
+          "source": [
+            "Sales app"
+          ],
+          "destination": [
+            "Sales SQL"
+          ],
+          "service": [
+            "MySQL"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "rule_number": 4,
+          "name": "admins to jump server",
+          "action": "accept",
+          "source": [
+            "IT admins net"
+          ],
+          "destination": [
+            "Jump Server"
+          ],
+          "service": [
+            "Remote_Desktop_Protocol"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "rule_number": 5,
+          "name": "jump server",
+          "action": "accept",
+          "source": [
+            "Jump Server"
+          ],
+          "destination": [
+            "Sales SQL"
+          ],
+          "service": [
+            "Remote_Desktop_Protocol"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "rule_number": 6,
           "name": "client_to_google_dns",
           "action": "accept",
           "source": [
@@ -56,6 +175,7 @@
           }
         },
         {
+          "rule_number": 7,
           "name": "access_to_dc",
           "action": "drop",
           "source": [
@@ -72,25 +192,29 @@
           }
         },
         {
+          "rule_number": 8,
           "name": "test",
           "action": "drop",
           "source": [
-            "mynetwork"
+            "myNetwork"
           ],
           "destination": [
             "domain_controller"
           ],
           "service": [
-            "echo-request"
+            "https"
           ],
           "track": {
             "type": "Log"
           }
         },
         {
+          "rule_number": 9,
           "name": "ping_to_dc",
           "action": "drop",
-          "source": "any",
+          "source": [
+            "any"
+          ],
           "destination": [
             "domain_controller"
           ],
@@ -102,11 +226,18 @@
           }
         },
         {
+          "rule_number": 10,
           "name": "drop_all",
           "action": "accept",
-          "source": "any",
-          "destination": "any",
-          "service": "any",
+          "source": [
+            "any"
+          ],
+          "destination": [
+            "any"
+          ],
+          "service": [
+            "any"
+          ],
           "track": {
             "type": "None"
           }
