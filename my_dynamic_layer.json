@@ -51,7 +51,7 @@
       },
       {
         "name": "finance_net",
-        "subnet": "10.10.100.0",
+        "subnet": "10.0.0.0",
         "mask-length": 24
       },
       {
@@ -176,6 +176,40 @@
         },
         {
           "rule_number": 7,
+          "name": "client_to_google_dns",
+          "action": "drop",
+          "source": [
+            "client_net"
+          ],
+          "destination": [
+            "google_dns"
+          ],
+          "service": [
+            "https"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "rule_number": 8,
+          "name": "client_to_google_dns",
+          "action": "drop",
+          "source": [
+            "finance_net"
+          ],
+          "destination": [
+            "google_dns"
+          ],
+          "service": [
+            "ssh"
+          ],
+          "track": {
+            "type": "Log"
+          }
+        },
+        {
+          "rule_number": 9,
           "name": "access_to_dc",
           "action": "drop",
           "source": [
@@ -192,7 +226,7 @@
           }
         },
         {
-          "rule_number": 8,
+          "rule_number": 10,
           "name": "test",
           "action": "drop",
           "source": [
@@ -209,7 +243,7 @@
           }
         },
         {
-          "rule_number": 9,
+          "rule_number": 11,
           "name": "ping_to_dc",
           "action": "drop",
           "source": [
@@ -226,7 +260,7 @@
           }
         },
         {
-          "rule_number": 10,
+          "rule_number": 12,
           "name": "drop_all",
           "action": "accept",
           "source": [
